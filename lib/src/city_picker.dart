@@ -12,7 +12,7 @@ Future<CityResult> showCityPicker(BuildContext context) async {
 
   var cityResult;
 
-  var result = showBottomSheet(
+  var result = showDialog(
     context: context,
     builder: (c) => CityPicker(
           params: cityData,
@@ -22,7 +22,7 @@ Future<CityResult> showCityPicker(BuildContext context) async {
         ),
   );
 
-  result.closed.then((v) {
+  result.then((v) {
     completer.complete(cityResult);
   });
 
@@ -44,34 +44,133 @@ class CityPicker extends StatefulWidget {
 }
 
 class _CityPickerState extends State<CityPicker> {
-  String province;
+  int provinceIndex = 0;
+  int city = 0;
+  int county = 0;
+
+  var cityResult = CityResult();
 
   Map<String, dynamic> get datas => widget.params;
-  List<Map<String, dynamic>> get proviceList => datas["provinceList"];
+  List<dynamic> get provinceList => datas["provinceList"];
+  String proviceNameByIndex(int index) => provinceList[index]["name"];
+
+  FixedExtentScrollController provinceScrollController;
+  FixedExtentScrollController cityScrollController;
+  FixedExtentScrollController countyScrollController;
 
   @override
   void initState() {
     super.initState();
-    province = provinceByIndex(0);
+    provinceScrollController = FixedExtentScrollController();
+    cityScrollController = FixedExtentScrollController();
+    countyScrollController = FixedExtentScrollController();
+  }
+
+  @override
+  void dispose() {
+    provinceScrollController?.dispose();
+    cityScrollController?.dispose();
+    countyScrollController?.dispose();
+    super.dispose();
   }
 
   String provinceByIndex(int index) {
-    return proviceList[index]["name"];
+    return provinceList[index]["name"];
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: CupertinoPicker.builder(
-        itemExtent: 50,
-        onSelectedItemChanged: (int value) {},
-        itemBuilder: _buildItem,
+    return Scaffold(
+      body: Container(
+        child: Row(
+          children: <Widget>[
+            Expanded(child: buildProvincePicker()),
+            Expanded(child: buildCityPicker()),
+            // Expanded(child: buildProvincePicker()),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildItem(BuildContext context, int index) {
-    var name = proviceList[index]["name"];
-    return Text(name);
+  Widget buildProvincePicker() {
+    return CupertinoPicker.builder(
+      itemExtent: 40,
+      scrollController: provinceScrollController,
+      backgroundColor: Colors.white,
+      onSelectedItemChanged: onProvinceChanged,
+      itemBuilder: _buildProvinceItem,
+      childCount: provinceList.length,
+    );
   }
+
+  Widget _buildProvinceItem(BuildContext context, int index) {
+    var name = provinceList[index]["name"];
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      child: Text(
+        name,
+        style: const TextStyle(fontSize: 14.0),
+      ),
+    );
+  }
+
+  Widget buildCityPicker() {
+    return CupertinoPicker.builder(
+      itemExtent: 40,
+      scrollController: cityScrollController,
+      backgroundColor: Colors.white,
+      onSelectedItemChanged: onCityChanged,
+      itemBuilder: _buildCityItem,
+      childCount: provinceList.length,
+    );
+  }
+
+  Widget _buildCityItem(BuildContext context, int index) {
+    var name = provinceList[index]["name"];
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      child: Text(
+        name,
+        style: const TextStyle(fontSize: 14.0),
+      ),
+    );
+  }
+
+  Widget buildCountyPicker() {
+    return CupertinoPicker.builder(
+      itemExtent: 40,
+      scrollController: provinceScrollController,
+      backgroundColor: Colors.white,
+      onSelectedItemChanged: onCountyChanged,
+      itemBuilder: _buildCountyItem,
+      childCount: provinceList.length,
+    );
+  }
+
+  Widget _buildCountyItem(BuildContext context, int index) {
+    var name = provinceList[index]["name"];
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.center,
+      child: Text(
+        name,
+        style: const TextStyle(fontSize: 14.0),
+      ),
+    );
+  }
+
+  void onProvinceChanged(int value) {
+    cityResult.province = proviceNameByIndex(value);
+    widget.forResult?.call(cityResult);
+  }
+
+  void onCityChanged(int value) {
+    cityResult.city = proviceNameByIndex(value);
+    widget.forResult?.call(cityResult);
+  }
+
+  void onCountyChanged(int value) {}
 }
