@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:city_picker/city_picker.dart';
-import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -50,8 +47,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() async{
-    var result = await showCityPicker();
+  void _incrementCounter() async {
+    var result = await showCityPicker(context);
     print(result?.province);
     print(result?.city);
     print(result?.county);
