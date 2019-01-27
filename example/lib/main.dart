@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String p3;
 
   void _incrementCounter() async {
-    var result = await showCityPicker(context,
+    CityResult result = await showCityPicker(context,
         initCity: CityResult()
           ..province = p1
           ..city = p2

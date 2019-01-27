@@ -1,14 +1,27 @@
 # city_picker
 
-A new Flutter package project.
+A chinese city picker, 中国城市选择器
 
-## Getting Started
+## use
 
-This project is a starting point for a Dart
-[package](https://flutter.io/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+pubspec.yaml
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```yaml
+city_picker: ^0.1.0
+```
+
+import
+
+```dart
+import 'package:city_picker/city_picker.dart';
+```
+
+use
+
+```dart
+    CityResult result = await showCityPicker(context);
+    String province = result?.province; // 省
+    String city = result?.city; // 市
+    String county = result?.county; // 地级市/县
+```
+
