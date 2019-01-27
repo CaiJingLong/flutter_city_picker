@@ -31,7 +31,9 @@ use
 
 ## 城市数据
 
-使用 json,数据来源为[python_get_city_datas](https://github.com/CaiJingLong/python_get_city_datas)
+使用 json,数据来源为爬虫爬取[python_get_city_datas](https://github.com/CaiJingLong/python_get_city_datas)
+
+真实数据来源[国家统计局城乡划分2017版](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2017/)
 
 ## LICENSE
 
