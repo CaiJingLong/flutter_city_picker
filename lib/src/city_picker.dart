@@ -10,20 +10,15 @@ Future<CityResult> showCityPicker(BuildContext context) async {
   Completer<CityResult> completer = Completer();
   var cityData = await loadCityData();
 
-  var cityResult;
-
   var result = showDialog(
     context: context,
     builder: (c) => CityPicker(
           params: cityData,
-          forResult: (v) {
-            cityResult = v;
-          },
         ),
   );
 
   result.then((v) {
-    completer.complete(cityResult);
+    completer.complete(v);
   });
 
   return completer.future;
@@ -90,16 +85,31 @@ class _CityPickerState extends State<CityPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Row(
-          children: <Widget>[
-            Expanded(child: buildProvincePicker()),
-            Expanded(child: buildCityPicker()),
-            Expanded(child: buildCountyPicker()),
-          ],
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: 300.0,
+            child: Material(
+              child: Column(
+                children: <Widget>[
+                  _buildButtons(),
+                  Expanded(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(child: buildProvincePicker()),
+                        Expanded(child: buildCityPicker()),
+                        Expanded(child: buildCountyPicker()),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -167,21 +177,25 @@ class _CityPickerState extends State<CityPicker> {
   void onProvinceChanged(int value) {
     _log("onProvinceChanged value = $value");
     provinceIndex = value;
+    cityIndex = 0;
+    countyIndex = 0;
     cityResult.province = proviceNameByIndex(value);
     cityResult.city = cityList[0]["name"];
     cityResult.county = countyList[0]["name"];
     widget.forResult?.call(cityResult);
-    cityScrollController.jumpToItem(0);
+    cityScrollController.jumpTo(0);
+    countyScrollController.jumpTo(0);
     setState(() {});
   }
 
   void onCityChanged(int value) {
     _log("onCityChanged value = $value");
     cityIndex = value;
+    countyIndex = 0;
     cityResult.city = cityList[value]["name"];
     cityResult.county = countyList[0]["name"];
     widget.forResult?.call(cityResult);
-    countyScrollController.jumpToItem(0);
+    countyScrollController.jumpTo(0);
     setState(() {});
   }
 
@@ -192,8 +206,38 @@ class _CityPickerState extends State<CityPicker> {
     widget.forResult?.call(cityResult);
     setState(() {});
   }
+
+  Widget _buildButtons() {
+    Widget buildButton(String text, Function onTap) {
+      return CupertinoButton(
+        child: Text(text),
+        onPressed: onTap,
+      );
+    }
+
+    return Container(
+      color: Colors.white,
+      height: 40.0,
+      child: Row(
+        children: <Widget>[
+          buildButton("取消", () {
+            Navigator.pop(context);
+          }),
+          Expanded(
+            child: Container(),
+          ),
+          buildButton("确定", () {
+            cityResult.province = proviceNameByIndex(provinceIndex);
+            cityResult.city = cityList[cityIndex]["name"];
+            cityResult.county = countyList[countyIndex]["name"];
+            Navigator.pop(context, cityResult);
+          }),
+        ],
+      ),
+    );
+  }
 }
 
 void _log(msg) {
-  print(msg);
+  // print(msg);
 }
