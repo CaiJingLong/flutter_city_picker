@@ -6,7 +6,10 @@ import 'package:flutter/cupertino.dart';
 
 import 'datas.dart';
 
-Future<CityResult> showCityPicker(BuildContext context) async {
+Future<CityResult> showCityPicker(
+  BuildContext context, {
+  CityResult initCity,
+}) async {
   Completer<CityResult> completer = Completer();
   var cityData = await loadCityData();
 
@@ -14,6 +17,7 @@ Future<CityResult> showCityPicker(BuildContext context) async {
     context: context,
     builder: (c) => CityPicker(
           params: cityData,
+          initResult: initCity,
         ),
   );
 
@@ -26,12 +30,11 @@ Future<CityResult> showCityPicker(BuildContext context) async {
 
 class CityPicker extends StatefulWidget {
   final Map<String, dynamic> params;
-  final ValueSetter<CityResult> forResult;
-
+  final CityResult initResult;
   const CityPicker({
     Key key,
     this.params,
-    this.forResult,
+    this.initResult,
   }) : super(key: key);
 
   @override
@@ -61,14 +64,21 @@ class _CityPickerState extends State<CityPicker> {
   @override
   void initState() {
     super.initState();
-    provinceScrollController = FixedExtentScrollController();
-    cityScrollController = FixedExtentScrollController();
-    countyScrollController = FixedExtentScrollController();
+
+    var initResult = widget.initResult;
+    List<int> initItems =
+        findIndexs(initResult?.province, initResult?.city, initResult?.county);
+
+    provinceScrollController =
+        FixedExtentScrollController(initialItem: initItems[0]);
+    cityScrollController =
+        FixedExtentScrollController(initialItem: initItems[1]);
+    countyScrollController =
+        FixedExtentScrollController(initialItem: initItems[2]);
 
     cityResult.province = proviceNameByIndex(0);
     cityResult.city = cityList[0]["name"];
     cityResult.county = countyList[0]["name"];
-    widget.forResult?.call(cityResult);
   }
 
   @override
@@ -95,21 +105,55 @@ class _CityPickerState extends State<CityPicker> {
               child: Column(
                 children: <Widget>[
                   _buildButtons(),
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(child: buildProvincePicker()),
-                        Expanded(child: buildCityPicker()),
-                        Expanded(child: buildCountyPicker()),
-                      ],
-                    ),
-                  ),
+                  _buildPickers(),
                 ],
               ),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildButtons() {
+    Widget buildButton(String text, Function onTap) {
+      return CupertinoButton(
+        child: Text(text),
+        onPressed: onTap,
+      );
+    }
+
+    return Container(
+      color: Colors.white,
+      height: 40.0,
+      child: Row(
+        children: <Widget>[
+          buildButton("取消", () {
+            Navigator.pop(context);
+          }),
+          Expanded(
+            child: Container(),
+          ),
+          buildButton("确定", () {
+            cityResult.province = proviceNameByIndex(provinceIndex);
+            cityResult.city = cityList[cityIndex]["name"];
+            cityResult.county = countyList[countyIndex]["name"];
+            Navigator.pop(context, cityResult);
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPickers() {
+    return Expanded(
+      child: Row(
+        children: <Widget>[
+          Expanded(child: buildProvincePicker()),
+          Expanded(child: buildCityPicker()),
+          Expanded(child: buildCountyPicker()),
+        ],
+      ),
     );
   }
 
@@ -182,7 +226,6 @@ class _CityPickerState extends State<CityPicker> {
     cityResult.province = proviceNameByIndex(value);
     cityResult.city = cityList[0]["name"];
     cityResult.county = countyList[0]["name"];
-    widget.forResult?.call(cityResult);
     cityScrollController.jumpTo(0);
     countyScrollController.jumpTo(0);
     setState(() {});
@@ -194,7 +237,6 @@ class _CityPickerState extends State<CityPicker> {
     countyIndex = 0;
     cityResult.city = cityList[value]["name"];
     cityResult.county = countyList[0]["name"];
-    widget.forResult?.call(cityResult);
     countyScrollController.jumpTo(0);
     setState(() {});
   }
@@ -203,38 +245,7 @@ class _CityPickerState extends State<CityPicker> {
     _log("onCountyChanged value = $value");
     countyIndex = value;
     cityResult.county = countyList[value]["name"];
-    widget.forResult?.call(cityResult);
     setState(() {});
-  }
-
-  Widget _buildButtons() {
-    Widget buildButton(String text, Function onTap) {
-      return CupertinoButton(
-        child: Text(text),
-        onPressed: onTap,
-      );
-    }
-
-    return Container(
-      color: Colors.white,
-      height: 40.0,
-      child: Row(
-        children: <Widget>[
-          buildButton("取消", () {
-            Navigator.pop(context);
-          }),
-          Expanded(
-            child: Container(),
-          ),
-          buildButton("确定", () {
-            cityResult.province = proviceNameByIndex(provinceIndex);
-            cityResult.city = cityList[cityIndex]["name"];
-            cityResult.county = countyList[countyIndex]["name"];
-            Navigator.pop(context, cityResult);
-          }),
-        ],
-      ),
-    );
   }
 }
 
