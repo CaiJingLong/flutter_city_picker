@@ -1,6 +1,10 @@
 # city_picker
 
-A chinese city picker, 中国城市选择器
+A city picker of china, 中国城市选择器
+
+## screenshot
+
+![图片](https://raw.githubusercontent.com/CaiJingLong/asset_for_picgo/master/20190127155034.png)
 
 ## use
 
@@ -24,4 +28,3 @@ use
     String city = result?.city; // 市
     String county = result?.county; // 地级市/县
 ```
-

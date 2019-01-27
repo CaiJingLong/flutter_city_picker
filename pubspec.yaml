@@ -1,8 +1,8 @@
 name: city_picker
 description: chinese_city_picker
 version: 0.1.0
-author: caijinglong
-homepage: https://github.com/caijinglong
+author: caijinglong<cjl_spy@163.com>
+homepage: https://github.com/CaiJingLong/flutter_city_picker
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
