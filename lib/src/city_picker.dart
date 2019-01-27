@@ -69,6 +69,8 @@ class _CityPickerState extends State<CityPicker> {
     List<int> initItems =
         findIndexs(initResult?.province, initResult?.city, initResult?.county);
 
+    _log(initItems);
+
     provinceScrollController =
         FixedExtentScrollController(initialItem: initItems[0]);
     cityScrollController =
@@ -79,6 +81,10 @@ class _CityPickerState extends State<CityPicker> {
     cityResult.province = proviceNameByIndex(0);
     cityResult.city = cityList[0]["name"];
     cityResult.county = countyList[0]["name"];
+
+    provinceIndex = initItems[0];
+    cityIndex = initItems[1];
+    countyIndex = initItems[2];
   }
 
   @override

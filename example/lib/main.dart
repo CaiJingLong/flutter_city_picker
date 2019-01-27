@@ -45,13 +45,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  String text;
+
+  String p1;
+  String p2;
+  String p3;
 
   void _incrementCounter() async {
-    var result = await showCityPicker(context);
-    print(result?.province);
-    print(result?.city);
-    print(result?.county);
+    var result = await showCityPicker(context,
+        initCity: CityResult()
+          ..province = p1
+          ..city = p2
+          ..county = p3);
+
+    if (result == null) {
+      return;
+    }
+
+    p1 = result?.province;
+    p2 = result?.city;
+    p3 = result?.county;
+
+    setState(() {
+      text = "${result?.province} - ${result?.city} - ${result?.county}";
+    });
   }
 
   @override
@@ -94,10 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
+              text ?? "",
               style: Theme.of(context).textTheme.display1,
             ),
           ],
