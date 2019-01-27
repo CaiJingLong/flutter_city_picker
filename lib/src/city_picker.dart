@@ -45,14 +45,19 @@ class CityPicker extends StatefulWidget {
 
 class _CityPickerState extends State<CityPicker> {
   int provinceIndex = 0;
-  int city = 0;
-  int county = 0;
+  int cityIndex = 0;
+  int countyIndex = 0;
 
   var cityResult = CityResult();
 
   Map<String, dynamic> get datas => widget.params;
+
   List<dynamic> get provinceList => datas["provinceList"];
   String proviceNameByIndex(int index) => provinceList[index]["name"];
+
+  List<dynamic> get cityList => provinceList[provinceIndex]["cityList"];
+
+  List<dynamic> get countyList => cityList[cityIndex]["countyList"];
 
   FixedExtentScrollController provinceScrollController;
   FixedExtentScrollController cityScrollController;
@@ -64,6 +69,11 @@ class _CityPickerState extends State<CityPicker> {
     provinceScrollController = FixedExtentScrollController();
     cityScrollController = FixedExtentScrollController();
     countyScrollController = FixedExtentScrollController();
+
+    cityResult.province = proviceNameByIndex(0);
+    cityResult.city = cityList[0]["name"];
+    cityResult.county = countyList[0]["name"];
+    widget.forResult?.call(cityResult);
   }
 
   @override
@@ -86,7 +96,7 @@ class _CityPickerState extends State<CityPicker> {
           children: <Widget>[
             Expanded(child: buildProvincePicker()),
             Expanded(child: buildCityPicker()),
-            // Expanded(child: buildProvincePicker()),
+            Expanded(child: buildCountyPicker()),
           ],
         ),
       ),
@@ -106,14 +116,7 @@ class _CityPickerState extends State<CityPicker> {
 
   Widget _buildProvinceItem(BuildContext context, int index) {
     var name = provinceList[index]["name"];
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.center,
-      child: Text(
-        name,
-        style: const TextStyle(fontSize: 14.0),
-      ),
-    );
+    return _buildTextItem(name);
   }
 
   Widget buildCityPicker() {
@@ -123,54 +126,74 @@ class _CityPickerState extends State<CityPicker> {
       backgroundColor: Colors.white,
       onSelectedItemChanged: onCityChanged,
       itemBuilder: _buildCityItem,
-      childCount: provinceList.length,
+      childCount: cityList.length,
     );
   }
 
   Widget _buildCityItem(BuildContext context, int index) {
-    var name = provinceList[index]["name"];
-    return Container(
-      color: Colors.white,
-      alignment: Alignment.center,
-      child: Text(
-        name,
-        style: const TextStyle(fontSize: 14.0),
-      ),
-    );
+    var name = cityList[index]["name"];
+    return _buildTextItem(name);
   }
 
   Widget buildCountyPicker() {
     return CupertinoPicker.builder(
       itemExtent: 40,
-      scrollController: provinceScrollController,
+      scrollController: countyScrollController,
       backgroundColor: Colors.white,
       onSelectedItemChanged: onCountyChanged,
       itemBuilder: _buildCountyItem,
-      childCount: provinceList.length,
+      childCount: countyList.length,
     );
   }
 
   Widget _buildCountyItem(BuildContext context, int index) {
-    var name = provinceList[index]["name"];
+    var name = countyList[index]["name"];
+    return _buildTextItem(name);
+  }
+
+  Widget _buildTextItem(String text) {
     return Container(
       color: Colors.white,
       alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: Text(
-        name,
+        text,
+        textAlign: TextAlign.center,
         style: const TextStyle(fontSize: 14.0),
       ),
     );
   }
 
   void onProvinceChanged(int value) {
+    _log("onProvinceChanged value = $value");
+    provinceIndex = value;
     cityResult.province = proviceNameByIndex(value);
+    cityResult.city = cityList[0]["name"];
+    cityResult.county = countyList[0]["name"];
     widget.forResult?.call(cityResult);
+    cityScrollController.jumpToItem(0);
+    setState(() {});
   }
 
   void onCityChanged(int value) {
-    cityResult.city = proviceNameByIndex(value);
+    _log("onCityChanged value = $value");
+    cityIndex = value;
+    cityResult.city = cityList[value]["name"];
+    cityResult.county = countyList[0]["name"];
     widget.forResult?.call(cityResult);
+    countyScrollController.jumpToItem(0);
+    setState(() {});
   }
 
-  void onCountyChanged(int value) {}
+  void onCountyChanged(int value) {
+    _log("onCountyChanged value = $value");
+    countyIndex = value;
+    cityResult.county = countyList[value]["name"];
+    widget.forResult?.call(cityResult);
+    setState(() {});
+  }
+}
+
+void _log(msg) {
+  print(msg);
 }
