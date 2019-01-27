@@ -28,3 +28,11 @@ use
     String city = result?.city; // 市
     String county = result?.county; // 地级市/县
 ```
+
+## 城市数据
+
+使用 json,数据来源为[python_get_city_datas](https://github.com/CaiJingLong/python_get_city_datas)
+
+## LICENSE
+
+copyright apache 2.0 for caijinglong
