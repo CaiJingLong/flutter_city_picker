@@ -1,6 +1,6 @@
 name: city_picker
 description: chinese_city_picker
-version: 0.1.0
+version: 0.1.1
 author: caijinglong<cjl_spy@163.com>
 homepage: https://github.com/CaiJingLong/flutter_city_picker
 
@@ -20,9 +20,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   assets:
-   - assets/city_json.json
+    - assets/city_json.json
   # To add assets to your package, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
@@ -33,7 +32,6 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
-
   # To add custom fonts to your package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
