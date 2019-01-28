@@ -66,13 +66,17 @@ class _CityPickerState extends State<CityPicker> {
     super.initState();
 
     var initResult = widget.initResult;
-    List<int> initItems = findIndexs(initResult?.province, initResult?.city, initResult?.county);
+    List<int> initItems =
+        findIndexs(initResult?.province, initResult?.city, initResult?.county);
 
     _log(initItems);
 
-    provinceScrollController = FixedExtentScrollController(initialItem: initItems[0]);
-    cityScrollController = FixedExtentScrollController(initialItem: initItems[1]);
-    countyScrollController = FixedExtentScrollController(initialItem: initItems[2]);
+    provinceScrollController =
+        FixedExtentScrollController(initialItem: initItems[0]);
+    cityScrollController =
+        FixedExtentScrollController(initialItem: initItems[1]);
+    countyScrollController =
+        FixedExtentScrollController(initialItem: initItems[2]);
 
     cityResult.province = proviceNameByIndex(0);
     cityResult.city = cityList[0]["name"];
