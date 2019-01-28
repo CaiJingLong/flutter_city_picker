@@ -250,11 +250,6 @@ class _CityPickerState extends State<CityPicker> {
     cityResult.county = countyList[0]["name"];
 
     countyScrollController = FixedExtentScrollController(initialItem: 0);
-    // countyScrollController.animateTo(0, duration: const Duration(milliseconds: 100), curve: Curves.linear);
-    // countyScrollController.jumpTo(0);
-
-    // var t = countyList.map((v) => v["name"].toString()).join(",");
-    // _log("t = $t");
     setState(() {});
   }
 
