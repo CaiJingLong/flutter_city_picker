@@ -66,17 +66,13 @@ class _CityPickerState extends State<CityPicker> {
     super.initState();
 
     var initResult = widget.initResult;
-    List<int> initItems =
-        findIndexs(initResult?.province, initResult?.city, initResult?.county);
+    List<int> initItems = findIndexs(initResult?.province, initResult?.city, initResult?.county);
 
     _log(initItems);
 
-    provinceScrollController =
-        FixedExtentScrollController(initialItem: initItems[0]);
-    cityScrollController =
-        FixedExtentScrollController(initialItem: initItems[1]);
-    countyScrollController =
-        FixedExtentScrollController(initialItem: initItems[2]);
+    provinceScrollController = FixedExtentScrollController(initialItem: initItems[0]);
+    cityScrollController = FixedExtentScrollController(initialItem: initItems[1]);
+    countyScrollController = FixedExtentScrollController(initialItem: initItems[2]);
 
     cityResult.province = proviceNameByIndex(0);
     cityResult.city = cityList[0]["name"];
@@ -180,7 +176,9 @@ class _CityPickerState extends State<CityPicker> {
   }
 
   Widget buildCityPicker() {
+    _log("_build city picker");
     return CupertinoPicker.builder(
+      key: ValueKey(this.cityList),
       itemExtent: 40,
       scrollController: cityScrollController,
       backgroundColor: Colors.white,
@@ -196,7 +194,9 @@ class _CityPickerState extends State<CityPicker> {
   }
 
   Widget buildCountyPicker() {
+    _log("_build county picker");
     return CupertinoPicker.builder(
+      key: ValueKey(this.countyList),
       itemExtent: 40,
       scrollController: countyScrollController,
       backgroundColor: Colors.white,
@@ -208,6 +208,7 @@ class _CityPickerState extends State<CityPicker> {
 
   Widget _buildCountyItem(BuildContext context, int index) {
     var name = countyList[index]["name"];
+    _log("county $index name = $name");
     return _buildTextItem(name);
   }
 
@@ -234,6 +235,10 @@ class _CityPickerState extends State<CityPicker> {
     cityResult.county = countyList[0]["name"];
     cityScrollController.jumpTo(0);
     countyScrollController.jumpTo(0);
+
+    cityScrollController = FixedExtentScrollController(initialItem: 0);
+    countyScrollController = FixedExtentScrollController(initialItem: 0);
+
     setState(() {});
   }
 
@@ -243,7 +248,8 @@ class _CityPickerState extends State<CityPicker> {
     countyIndex = 0;
     cityResult.city = cityList[value]["name"];
     cityResult.county = countyList[0]["name"];
-    countyScrollController.jumpTo(0);
+
+    countyScrollController = FixedExtentScrollController(initialItem: 0);
     setState(() {});
   }
 
