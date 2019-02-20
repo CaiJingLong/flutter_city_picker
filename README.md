@@ -1,6 +1,6 @@
 # city_picker
 
-A city picker of china, 中国城市选择器
+A city picker of china, 中国城市选择器 [![pub package](https://img.shields.io/pub/v/city_picker.svg)](https://pub.dartlang.org/packages/city_picker)
 
 ## screenshot
 
@@ -10,8 +10,10 @@ A city picker of china, 中国城市选择器
 
 pubspec.yaml
 
+latest_version: [![pub package](https://img.shields.io/pub/v/city_picker.svg)](https://pub.dartlang.org/packages/city_picker)
+
 ```yaml
-city_picker: ^0.1.1
+city_picker: $latest_version
 ```
 
 import
@@ -31,9 +33,9 @@ use
 
 ## 城市数据
 
-使用 json,数据来源为爬虫爬取[python_get_city_datas](https://github.com/CaiJingLong/python_get_city_datas)
+使用 json,数据来源为 python 爬虫爬取[python_get_city_datas](https://github.com/CaiJingLong/python_get_city_datas)
 
-真实数据来源[国家统计局城乡划分 2017 版](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2017/)
+真实数据来源[国家统计局城乡划分 2018 版](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2017/)
 
 ## LICENSE
 
