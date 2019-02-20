@@ -1,6 +1,8 @@
 # city_picker
 
-A city picker of china, 中国城市选择器 [![pub package](https://img.shields.io/pub/v/city_picker.svg)](https://pub.dartlang.org/packages/city_picker)
+[![pub package](https://img.shields.io/pub/v/city_picker.svg)](https://pub.dartlang.org/packages/city_picker)
+
+A city picker of china, 中国城市选择器
 
 ## screenshot
 
@@ -29,6 +31,16 @@ use
     String province = result?.province; // 省
     String city = result?.city; // 市
     String county = result?.county; // 地级市/县
+```
+
+init pick city
+
+```dart
+    CityResult result = await showCityPicker(context,
+     initCity: CityResult()
+       ..province = p1 // 省
+       ..city = p2 // 市
+       ..county = p3); // 地级市/县
 ```
 
 ## 城市数据

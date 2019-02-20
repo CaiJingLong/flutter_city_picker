@@ -1,6 +1,6 @@
 name: city_picker
-description: chinese_city_picker
-version: 0.1.2
+description: china city picker, Simple and easy to use. A method to pick city.
+version: 0.1.3
 author: caijinglong<cjl_spy@163.com>
 homepage: https://github.com/CaiJingLong/flutter_city_picker
 
