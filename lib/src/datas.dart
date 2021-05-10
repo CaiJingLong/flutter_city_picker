@@ -29,7 +29,7 @@ List<int> findIndexs(String provinceName, String cityName, String countyName) {
   var cityIndex = 0;
   var countyIndex = 0;
 
-  if (proIndex == null && cityName == null && countyName == null) {
+  if (provinceName == null && cityName == null && countyName == null) {
     return [0, 0, 0];
   }
 
