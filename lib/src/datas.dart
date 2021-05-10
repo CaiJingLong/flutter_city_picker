@@ -24,7 +24,7 @@ void releaseCityData() {
   _isInit = false;
 }
 
-List<int> findIndexs(String provinceName, String cityName, String countyName) {
+List<int> findIndexs(String? provinceName, String? cityName, String? countyName) {
   var proIndex = 0;
   var cityIndex = 0;
   var countyIndex = 0;
