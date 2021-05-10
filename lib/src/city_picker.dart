@@ -243,8 +243,9 @@ class _CityPickerState extends State<CityPicker> {
     cityResult.province = proviceNameByIndex(value);
     cityResult.city = cityList[0]["name"];
     cityResult.county = countyList[0]["name"];
-    cityScrollController.jumpTo(0);
-    countyScrollController.jumpTo(0);
+    // 此处偶尔有报错，测试注释掉不影响功能
+    // cityScrollController.jumpTo(0);
+    // countyScrollController.jumpTo(0);
 
     cityScrollController = FixedExtentScrollController(initialItem: 0);
     countyScrollController = FixedExtentScrollController(initialItem: 0);
