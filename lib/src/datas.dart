@@ -24,12 +24,12 @@ void releaseCityData() {
   _isInit = false;
 }
 
-List<int> findIndexs(String provinceName, String cityName, String countyName) {
+List<int> findIndexs(String? provinceName, String? cityName, String? countyName) {
   var proIndex = 0;
   var cityIndex = 0;
   var countyIndex = 0;
 
-  if (proIndex == null && cityName == null && countyName == null) {
+  if (provinceName == null && cityName == null && countyName == null) {
     return [0, 0, 0];
   }
 

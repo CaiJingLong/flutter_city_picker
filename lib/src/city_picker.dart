@@ -8,7 +8,7 @@ import 'datas.dart';
 
 Future<CityResult> showCityPicker(
   BuildContext context, {
-  CityResult initCity,
+  CityResult? initCity,
 }) async {
   Completer<CityResult> completer = Completer();
   var cityData = await loadCityData();
@@ -30,10 +30,10 @@ Future<CityResult> showCityPicker(
 
 class CityPicker extends StatefulWidget {
   final Map<String, dynamic> params;
-  final CityResult initResult;
+  final CityResult? initResult;
   const CityPicker({
-    Key key,
-    this.params,
+    Key? key,
+    required this.params,
     this.initResult,
   }) : super(key: key);
 
@@ -57,17 +57,22 @@ class _CityPickerState extends State<CityPicker> {
 
   List<dynamic> get countyList => cityList[cityIndex]["countyList"];
 
-  FixedExtentScrollController provinceScrollController;
-  FixedExtentScrollController cityScrollController;
-  FixedExtentScrollController countyScrollController;
+  late FixedExtentScrollController provinceScrollController;
+  late FixedExtentScrollController cityScrollController;
+  late FixedExtentScrollController countyScrollController;
 
   @override
   void initState() {
     super.initState();
 
-    var initResult = widget.initResult;
-    List<int> initItems =
-        findIndexs(initResult?.province, initResult?.city, initResult?.county);
+    List<int> initItems = [0, 0, 0];
+    if(widget.initResult != null) {
+      initItems = findIndexs(
+          widget.initResult!.province,
+          widget.initResult!.city,
+          widget.initResult!.county
+      );
+    }
 
     _log(initItems);
 
@@ -89,9 +94,9 @@ class _CityPickerState extends State<CityPicker> {
 
   @override
   void dispose() {
-    provinceScrollController?.dispose();
-    cityScrollController?.dispose();
-    countyScrollController?.dispose();
+    provinceScrollController.dispose();
+    cityScrollController.dispose();
+    countyScrollController.dispose();
     super.dispose();
   }
 
@@ -122,9 +127,10 @@ class _CityPickerState extends State<CityPicker> {
   }
 
   Widget _buildButtons() {
-    Widget buildButton(String text, Function onTap) {
+    Widget buildButton(String text,void Function() onTap) {
       return CupertinoButton(
-        child: Text(text),
+        child: Text(text, style: const TextStyle(fontSize: 14),),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         onPressed: onTap,
       );
     }
@@ -138,7 +144,7 @@ class _CityPickerState extends State<CityPicker> {
             Navigator.pop(context);
           }),
           Expanded(
-            child: Container(),
+            child: SizedBox(height: 10,),
           ),
           buildButton("确定", () {
             cityResult.province = proviceNameByIndex(provinceIndex);
@@ -237,8 +243,9 @@ class _CityPickerState extends State<CityPicker> {
     cityResult.province = proviceNameByIndex(value);
     cityResult.city = cityList[0]["name"];
     cityResult.county = countyList[0]["name"];
-    cityScrollController.jumpTo(0);
-    countyScrollController.jumpTo(0);
+    // 此处偶尔有报错，测试注释掉不影响功能
+    // cityScrollController.jumpTo(0);
+    // countyScrollController.jumpTo(0);
 
     cityScrollController = FixedExtentScrollController(initialItem: 0);
     countyScrollController = FixedExtentScrollController(initialItem: 0);
