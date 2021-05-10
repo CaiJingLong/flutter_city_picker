@@ -129,7 +129,8 @@ class _CityPickerState extends State<CityPicker> {
   Widget _buildButtons() {
     Widget buildButton(String text,void Function() onTap) {
       return CupertinoButton(
-        child: Text(text),
+        child: Text(text, style: const TextStyle(fontSize: 14),),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         onPressed: onTap,
       );
     }
@@ -143,7 +144,7 @@ class _CityPickerState extends State<CityPicker> {
             Navigator.pop(context);
           }),
           Expanded(
-            child: Container(),
+            child: SizedBox(height: 10,),
           ),
           buildButton("确定", () {
             cityResult.province = proviceNameByIndex(provinceIndex);
